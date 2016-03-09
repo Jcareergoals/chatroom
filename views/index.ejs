@@ -3,8 +3,25 @@
 	<head>
 		<title>Chatroom</title>
 		<meta charset="UTF-8">
+		<!-- jquery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+		<!-- linking socket file  -->
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var socket = io.connect(); 
+				var name = prompt("Welcome to the Simple Chatroom! Please enter you name :)"); 
+				console.log('The name that you entered was '+name);
+			});
+		</script>
 		<style type="text/css">
-			/* temporary css will go here then later linked from the statics folder */ 
+			*{
+				margin: 0px; 
+				padding: 0px; 
+			}
+			body {
+				background-color: rgb(250,250,250); 
+			}
 		</style>
 	</head>
 	<body>
