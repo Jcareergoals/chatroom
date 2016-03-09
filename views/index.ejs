@@ -7,13 +7,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
 		<!-- linking socket file  -->
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				var socket = io.connect(); 
-				var name = prompt("Welcome to the Simple Chatroom! Please enter you name :)"); 
-				console.log('The name that you entered was '+name);
-			});
-		</script>
 		<style type="text/css">
 			*{
 				margin: 0px; 
@@ -21,12 +14,64 @@
 			}
 			body {
 				background-color: rgb(250,250,250); 
+				background-image: url("background_img.jpg");
+				background-repeat: no-repeat;
+				background-size: cover; 
+			}
+			.container {
+				width: 960px; 
+				height: 500px; 
+				background-color: rgba(250,250,250,.5); 
+				box-shadow: 0px 0px 10px gray inset; 
+				border-radius: 5px; 
+				margin: 5px auto;
+				padding: 20px; 
+			}
+			.user {
+				display: inline-block;
+				width: 100px; 
+				height: 100px; 
+				padding: 10px; 
+				margin: 5px;
+				font-weight: bold; 
+				background-color: rgba(250,250,250,.5); 
+			}
+			.chatroom_label {
+				color: white; 
+				text-align: center; 
+				margin-top: 60px; 
 			}
 		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var name = prompt("WELCOME TO THE CHATROOM!!! PLEASE ENTER YOUR NAME :)"); 
+				var socket = io.connect(); 
+				if(name !== null){
+					socket.emit("new_user", {name : name}); 
+				} else {
+					socket.emit("get_updated_list"); 
+				}
+				socket.on("updated_users", function(data){
+					$(".container").empty(); 
+					for(var i = 0; i < data.users.length; i ++){
+						$(".container").append("<button class='user'>"+data.users[i].name+"</button>"); 
+					}
+				});
+				socket.on("updated_users_list", function(data){
+					$(".container").empty(); 
+					for(var i = 0; i < data.users.length; i ++){
+						$(".container").append("<button class='user'>"+data.users[i].name+"</button>"); 
+					}
+				});
+				socket.on("alert_users", function(data){
+					alert(data.new_user+"entered the chatroom"); 
+				}); 
+			});
+		</script>
 	</head>
 	<body>
-		<div id="container">
-
-		</div> <!-- End Container -->
+		<p class='chatroom_label'>USERS IN THE CHATROOM</p>
+		<div class="container">
+		</div>
 	</body> 
 </html>
